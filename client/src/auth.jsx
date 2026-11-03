@@ -18,11 +18,12 @@ export function AuthProvider({ children }) {
   }, []);
 
   const login = async (email, password) => {
-    const data = await api('/auth/login', { method: 'POST', body: { email, password } });
-    setToken(data.token);
-    setUser(data.user);
-    return data.user;
-  };
+  const data = await api('/auth/login', { method: 'POST', body: { email, password } });
+  if (!data.user) throw new Error('Login response had no user');
+  setToken(data.token);
+  setUser(data.user);
+  return data.user;
+};
 
   const logout = () => { setToken(null); setUser(null); };
 

@@ -21,10 +21,19 @@ export default function Login() {
     localStorage.setItem('bookleaf-theme', darkMode ? 'dark' : 'light');
   }, [darkMode]);
 
-  const submit = async (e) => {
-    e.preventDefault();
-    setBusy(true);
-    setError('');
+ const submit = async (e) => {
+  e.preventDefault();
+  setBusy(true);
+  setError('');
+  try {
+    await login(email, password);
+    navigate('/');
+  } catch (err) {
+    setError(err.message);
+  } finally {
+    setBusy(false);
+  }
+};
 
     try {
       const user = await login(email, password);
