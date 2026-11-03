@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
+const path = require('path');
 const { notFound, errorHandler } = require('./middleware/errorHandler');
 
 const app = express();
@@ -15,6 +16,8 @@ app.get('/api/health', (req, res) => res.json({ ok: true }));
  app.use('/api/tickets', require('./routes/tickets'));
 
 app.use('/api', notFound);
+const clientDist = path.join(__dirname, '../../client/dist');
+app.use(express.static(clientDist));
+app.get('*', (req, res) => res.sendFile(path.join(clientDist, 'index.html')));
 app.use(errorHandler);
-
 module.exports = app;
